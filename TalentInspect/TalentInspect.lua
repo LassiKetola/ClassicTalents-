@@ -98,6 +98,7 @@ for i = 1, 3 do
     f:SetScript("OnClick", function(self)
         f:Toggle(i)
         state.active_talent_spec = self.text:GetText()
+        U.SetTalentTreeBackground(state.class_name, state.active_talent_spec)
         U.ClearAllTalents()
         U.SetNewTalents(state.talents[self.text:GetText()])
         U.SetTalentPointsValue(
@@ -162,9 +163,9 @@ for i = 1, 2 do
     end
 
     f:SetScript("OnClick", function()
+        state.talents = U.GetPlayerTalents(i)
         f:Toggle(i)
         U.ClearAllTalents()
-        state.talents = U.GetPlayerTalents(i)
         U.SetNewTalents(state.talents[state.active_talent_spec])
         U.SetActiveTab(state.active_talent_spec)
         U.SetTalentPointsValue(
