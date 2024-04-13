@@ -3,14 +3,13 @@ local _, U = ...
 table.insert(UISpecialFrames, TalentInspectFrame)
 
 local state = {
-    ["active_talents"] = {},
-    ["secondary_talents"] = {},
+    ["talents"] = {},
     ["talent_specs"] = {},
     ["dual_spec_info"] = {},
     ["has_dual_spec"] = false,
     ["class_name"] = "",
     ["active_dualspec"] = 0,
-    ["active_talent_spec"] = 0
+    ["active_talent_spec"] = ""
 }
 
 -- *****************************************
@@ -25,7 +24,7 @@ TalentInspectFrame:SetSize(220, 270)
 TalentInspectFrame:RegisterEvent("INSPECT_READY")
 
 TalentInspectFrame:SetScript("OnEvent", function(event)
-    state.active_talents      = U.GetPlayerTalents()
+    state.talents             = U.GetPlayerTalents()
     state.talent_specs        = U.GetPlayerTalentSpecs()
     state.has_dual_spec       = U.GetPlayerDualSpec()
     state.class_name          = U.GetPlayerClass("player")
@@ -46,10 +45,10 @@ TalentInspectFrame:SetScript("OnEvent", function(event)
     U.SetTalentTreeBackground(state.class_name, state.active_talent_spec)
     U.SetTalentTabs(state.talent_specs, state.active_talent_spec)
     U.SetActiveTab(state.active_talent_spec)
-    U.SetNewTalents(state.active_talents[state.active_talent_spec])
+    U.SetNewTalents(state.talents[state.active_talent_spec])
     U.SetTalentPointsValue(
         state.active_talent_spec,
-        U.GetNumTalents(state.active_talents[state.active_talent_spec])
+        U.GetNumTalents(state.talents[state.active_talent_spec])
     )
     
     TalentGridFrame:SetParent(InspectPaperDollFrame)
@@ -58,6 +57,7 @@ TalentInspectFrame:SetScript("OnEvent", function(event)
     TalentGridToggleButton:SetPoint("TOPRIGHT", -40, -43)
     TalentGridToggleButton:SetFrameStrata("HIGH")
     TalentGridToggleButton:SetFrameLevel(20)
+    TalentGridFrame:Show()
 end)
 
 -- *****************************************
@@ -97,12 +97,12 @@ for i = 1, 3 do
 
     f:SetScript("OnClick", function(self)
         f:Toggle(i)
+        state.active_talent_spec = self.text:GetText()
         U.ClearAllTalents()
-        U.SetNewTalents(state.active_talents[self.text:GetText()])
-        print(self.text:GetText())
+        U.SetNewTalents(state.talents[self.text:GetText()])
         U.SetTalentPointsValue(
             state.active_talent_spec,
-            U.GetNumTalents(state.active_talents[self.text:GetText()])
+            U.GetNumTalents(state.talents[self.text:GetText()])
         )
     end)
 
@@ -143,14 +143,33 @@ for i = 1, 2 do
     iconFrame.texture:SetAllPoints(iconFrame)
     iconFrame.texture:SetTexture(134532)
     iconFrame.texture:SetDesaturated(true)
-    iconFrame:SetAlpha(0.8)
 
     function f:SetIcon(texture)
         iconFrame.texture:SetTexture(texture)
     end
 
-    function f:SetActive()
-        iconFrame.texture:SetDesaturated(false)
-        iconFrame:SetAlpha(1)
+    function f:Toggle(i)
+        for x = 1, 2 do
+            local f = _G["DUALSPEC_TAB_ICON" .. x]
+            if x == i then
+                f.texture:SetDesaturated(false)
+                f:SetAlpha(1)
+            else
+                f.texture:SetDesaturated(true)
+                f:SetAlpha(0.5)
+            end
+        end
     end
+
+    f:SetScript("OnClick", function()
+        f:Toggle(i)
+        U.ClearAllTalents()
+        state.talents = U.GetPlayerTalents(i)
+        U.SetNewTalents(state.talents[state.active_talent_spec])
+        U.SetActiveTab(state.active_talent_spec)
+        U.SetTalentPointsValue(
+            state.active_talent_spec,
+            U.GetNumTalents(state.talents[state.active_talent_spec])
+        )
+    end)
 end

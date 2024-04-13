@@ -9,6 +9,7 @@ local BUTTON_HEIGHT = 55
 local TalentGridFrame = CreateFrame("Frame", "TalentGridFrame", TalentInspectFrame, "InsetFrameTemplate")
 TalentGridFrame:SetSize(220, 270)
 TalentGridFrame:SetPoint("CENTER")
+TalentGridFrame:Hide()
 
 local TalentGridToggleButton = CreateFrame("Button", "TalentGridToggleButton", TalentInspectFrame, "BackdropTemplate")
 TalentGridToggleButton:SetSize(28, 28)

@@ -71,16 +71,21 @@ local SetDualSpecTalents = function(specs, specIndex)
         local f = _G["DUALSPEC_TAB" .. idx]
         f:SetIcon(talents.icon)
         if idx == specIndex then
-            f:SetActive()
+            f:Toggle(idx)
         end
     end
 end
 
-function GetPlayerTalents()
+function GetPlayerTalents(specIndex)
     local new_list = {}
     for x = 1, 3 do
-        local active_spec = GetActiveTalentGroup(true) -- // true = INSPECT
+        local active_spec
         local spec = GetTalentTabInfo(x, true, false, active_spec)
+        if specIndex ~= nil then
+            active_spec = specIndex
+        else
+            active_spec = GetActiveTalentGroup(true)
+        end
         new_list[spec] = {}
         for y = 1, 28 do
             local name, icon, row, cell, rank, max_rank = GetTalentInfo(x, y, true, 1, active_spec)
