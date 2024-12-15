@@ -159,7 +159,6 @@ function GetPlayerActiveDualSpec()
 end
 
 function GetPlayerActiveTalentSpec()
-    print("starts")
     local activeGroup = GetActiveTalentGroup(true) -- // true = INSPECT
     print(activeGroup)
     local activeSpec = ""
