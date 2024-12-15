@@ -159,17 +159,24 @@ function GetPlayerActiveDualSpec()
 end
 
 function GetPlayerActiveTalentSpec()
+    print("starts")
     local activeGroup = GetActiveTalentGroup(true) -- // true = INSPECT
+    print(activeGroup)
     local activeSpec = ""
     local specPoints = 0
     for x = 1, 3 do
-        local spec, icon, points = GetTalentTabInfo(x, true, false, activeGroup)
-        local _points = tonumber(points)
+        print("before spec, icon, points")
+        local id, name, desc, iconTexture, pointsSpent = GetTalentTabInfo(x, true, false, activeGroup)
+        print(name, desc, pointsSpent)
+        local _points = tonumber(pointsSpent)
         if _points > specPoints then
-            activeSpec = spec
+            activeSpec = name
             specPoints = _points
+            print(activeSpec, specPoints)
+            print("------------------")
         end
     end
+    print(activeSpec)
     return activeSpec
 end
 
