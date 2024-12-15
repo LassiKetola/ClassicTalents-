@@ -172,7 +172,6 @@ function GetPlayerActiveTalentSpec()
             activeSpec = name
             specPoints = _points
             print(activeSpec, specPoints)
-            print("------------------")
         end
     end
     print(activeSpec)
